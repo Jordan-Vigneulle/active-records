@@ -24,7 +24,7 @@ public class DBConnection {
         this.connection = DriverManager.getConnection(urlDB, connectionProps);
     }
 
-    public synchronized Connection getConnection() throws SQLException {
+    public static synchronized Connection getConnection() throws SQLException {
         if(connection == null){
             new DBConnection();
         }
