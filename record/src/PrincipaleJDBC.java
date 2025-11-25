@@ -14,10 +14,10 @@ public class PrincipaleJDBC {
 
         // variables de connection
         String userName = "root";
-        String password = "root";
+        String password = "";
         String serverName = "127.0.0.1";
-        //String portNumber = "3306";
-        String portNumber = "8889"; // Port par défaut sur MAMP
+        String portNumber = "3306";
+//        String portNumber = "8080"; // Port par défaut sur MAMP
         String tableName = "personne";
 
         // il faut une base nommee testPersonne !
@@ -36,6 +36,7 @@ public class PrincipaleJDBC {
             System.out.println(urlDB);
             Connection connect = DriverManager.getConnection(urlDB, connectionProps);
             //Connection connect = DriverManager.getConnection("jdbc:mysql://db4free.net/testpersonne","scruzlara", "root2014");
+
             // creation de la table Personne
             String createString = "CREATE TABLE Personne ( "
                     + "ID INTEGER  AUTO_INCREMENT, " + "NOM varchar(40) NOT NULL, "
