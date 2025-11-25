@@ -14,7 +14,7 @@ public class DBConnection {
     private static String dbName = "testpersonne";
     private static Connection connection;
     private Statement statement;
-    
+
     private DBConnection() throws SQLException{
         Properties prop = new Properties();
         connectionProps.put("user",userName);
