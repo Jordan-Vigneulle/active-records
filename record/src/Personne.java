@@ -1,3 +1,7 @@
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class Personne {
@@ -11,34 +15,65 @@ public class Personne {
         this.prenom = prenom;
     }
 
-    public void save(){
-
-    }
-    private void saveNew(){
-
-    }
-    public int getId(){
+    public int getId() {
         return id;
     }
-    public void delete(){
 
+    public static Personne findById(int id) throws SQLException {
+        ArrayList<Personne> list = new ArrayList<>();
+        String SQLPrep = "SELECT * FROM Personne WHERE id="+id+";";
+        PreparedStatement prep1 = DBConnection.getConnection().prepareStatement(SQLPrep);
+        prep1.execute();
+        ResultSet rs = prep1.getResultSet();
+        String nom = rs.getString("nom");
+        String prenom = rs.getString("prenom");
+        int idp = rs.getInt("id");
+        Personne p = new Personne(nom, prenom);
+        p.id = idp;
+        return p;
     }
-    private void update(){
 
+    public static Personne findByNom(String nom) throws SQLException {
+        ArrayList<Personne> list = new ArrayList<>();
+        String SQLPrep = "SELECT * FROM Personne WHERE nom="+nom+";";
+        PreparedStatement prep1 = DBConnection.getConnection().prepareStatement(SQLPrep);
+        prep1.execute();
+        ResultSet rs = prep1.getResultSet();
+        String nomp = rs.getString("nom");
+        String prenom = rs.getString("prenom");
+        int idp = rs.getInt("id");
+        Personne p = new Personne(nomp, prenom);
+        p.id = idp;
+        return p;
     }
-    public static Personne findById(int id){
-        return new Personne("Gg","DFl");
+
+    public static ArrayList<Personne> findAll() throws SQLException {
+        ArrayList<Personne> list = new ArrayList<>();
+        String SQLPrep = "SELECT * FROM Personne;";
+        PreparedStatement prep1 = DBConnection.getConnection().prepareStatement(SQLPrep);
+        prep1.execute();
+        ResultSet rs = prep1.getResultSet();
+        while (rs.next()) {
+            String nom = rs.getString("nom");
+            String prenom = rs.getString("prenom");
+            int id = rs.getInt("id");
+            Personne p = new Personne(nom, prenom);
+            p.id = id;
+            list.add(p);
+        }
+        return list;
     }
-    public static Personne findByNom(String nom){
-        return new Personne("Gg","DFl");
+    public static void createTable() throws SQLException {
+        String createString = "CREATE TABLE Personne ( "
+                + "ID INTEGER  AUTO_INCREMENT, " + "NOM varchar(40) NOT NULL, "
+                + "PRENOM varchar(40) NOT NULL, " + "PRIMARY KEY (ID))";
+        Statement stmt = DBConnection.getConnection().createStatement();
+        stmt.executeUpdate(createString);
     }
-    public static ArrayList<Personne> findAll(){
-        return new ArrayList<Personne>();
-    }
-    public static void createTable(){
-        
-    }
-    public static void deleteTable(){
+    public static void deleteTable() throws SQLException {
+        String drop = "DROP TABLE Personne";
+        Statement stmt = DBConnection.getConnection().createStatement();
+        stmt.executeUpdate(drop);
 
     }
     public String toString(){
@@ -57,4 +92,6 @@ public class Personne {
         this.prenom = prenom;
     }
 
+    public void save() {
+    }
 }
