@@ -1,3 +1,5 @@
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -5,13 +7,23 @@ import org.junit.jupiter.api.BeforeEach;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
 public class TestPersonne {
-    @BeforeEach
+
+    @Before
     public void setUp() throws SQLException {
         Personne.createTable();
+        Personne p1 = new Personne("Spielberg", "Steven");
+        Personne p2 = new Personne("Scott", "Ridley");
+        Personne p3 = new Personne("Kubrick", "Stanley");
+        Personne p4 = new Personne("Fincher", "David");
+        p1.save();
+        p2.save();
+        p3.save();
+        p4.save();
     }
 
     @Test
@@ -38,13 +50,14 @@ public class TestPersonne {
     @Test
     public void test_FindbyNom_OK() throws SQLException {
         Personne p1 = Personne.findByNom("Scott");
-        assertEquals(p1.getNom(),"Scott");
+        assertNotNull(p1);
+        assertEquals("Scott", p1.getNom());
     }
 
     @Test
     public void test_FindAll() throws SQLException {
-        Personne p1 = Personne.findByNom("Scott");
-        assertEquals(p1.getNom(),"Scott");
+        ArrayList<Personne> personnes = Personne.findAll();
+        assertEquals(personnes.getFirst().getPrenom(),"Steven");
     }
 
     @Test
@@ -54,7 +67,7 @@ public class TestPersonne {
     }
 
 
-    @AfterEach
+    @After
     public void tearDown() throws SQLException {
         Personne.deleteTable();
     }

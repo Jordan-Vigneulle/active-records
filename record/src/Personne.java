@@ -1,3 +1,4 @@
+import javax.swing.plaf.nimbus.State;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -72,18 +73,19 @@ public class Personne {
         return list;
     }
     public static void createTable() throws SQLException {
-        String createString = "CREATE TABLE Personne ( "
+        String createString = "CREATE TABLE personne ( "
                 + "ID INTEGER  AUTO_INCREMENT, " + "NOM varchar(40) NOT NULL, "
                 + "PRENOM varchar(40) NOT NULL, " + "PRIMARY KEY (ID))";
         Statement stmt = DBConnection.getConnection().createStatement();
-        stmt.executeUpdate(createString);
+        stmt.execute(createString);
     }
-    public static void deleteTable() throws SQLException {
-        String drop = "DROP TABLE Personne";
-        Statement stmt = DBConnection.getConnection().createStatement();
-        stmt.executeUpdate(drop);
 
+    public static void deleteTable() throws SQLException {
+        String drop = "DROP TABLE personne";
+        Statement stmt = DBConnection.getConnection().createStatement();
+        stmt.execute(drop);
     }
+
     public String toString(){
         return nom + " " + prenom;
     }
@@ -100,6 +102,20 @@ public class Personne {
         this.prenom = prenom;
     }
 
-    public void save() {
+    public void save() throws SQLException {
+        if(this.id == -1) {
+            String createString = "INSERT INTO personne (nom, prenom) VALUES (?, ?)";
+            PreparedStatement stmt =DBConnection.getConnection().prepareStatement(createString);
+            stmt.setString(1, nom);
+            stmt.setString(2, prenom);
+            stmt.execute(createString);
+        }else{
+            String update = "Update personne set nom = ?, prenom = ? where id = ?";
+            PreparedStatement stmt = DBConnection.getConnection().prepareStatement(update);
+            stmt.setString(1, this.nom);
+            stmt.setString(2, this.prenom);
+            stmt.setInt(3, this.id);
+            stmt.executeUpdate(update);
+        }
     }
 }
