@@ -73,7 +73,7 @@ public class Personne {
         return list;
     }
     public static void createTable() throws SQLException {
-        String createString = "CREATE TABLE personne ( "
+        String createString = "CREATE TABLE Personne ( "
                 + "ID INTEGER  AUTO_INCREMENT, " + "NOM varchar(40) NOT NULL, "
                 + "PRENOM varchar(40) NOT NULL, " + "PRIMARY KEY (ID))";
         Statement stmt = DBConnection.getConnection().createStatement();
@@ -81,7 +81,7 @@ public class Personne {
     }
 
     public static void deleteTable() throws SQLException {
-        String drop = "DROP TABLE personne";
+        String drop = "DROP TABLE Personne";
         Statement stmt = DBConnection.getConnection().createStatement();
         stmt.execute(drop);
     }
@@ -104,13 +104,13 @@ public class Personne {
 
     public void save() throws SQLException {
         if(this.id == -1) {
-            String createString = "INSERT INTO personne (nom, prenom) VALUES (?, ?)";
-            PreparedStatement stmt =DBConnection.getConnection().prepareStatement(createString);
-            stmt.setString(1, nom);
-            stmt.setString(2, prenom);
-            stmt.execute(createString);
+            String SQLPrep = "INSERT INTO Personne (nom, prenom) VALUES (?,?);";
+            PreparedStatement prep = DBConnection.getConnection().prepareStatement(SQLPrep, Statement.RETURN_GENERATED_KEYS);
+            prep.setString(1, this.nom);
+            prep.setString(2, this.prenom);
+            prep.executeUpdate();
         }else{
-            String update = "Update personne set nom = ?, prenom = ? where id = ?";
+            String update = "Update Personne set nom = ?, prenom = ? where id = ?";
             PreparedStatement stmt = DBConnection.getConnection().prepareStatement(update);
             stmt.setString(1, this.nom);
             stmt.setString(2, this.prenom);
