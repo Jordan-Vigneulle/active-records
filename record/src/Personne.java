@@ -26,7 +26,9 @@ public class Personne {
         prep1.setInt(1, id);
         prep1.execute();
         ResultSet rs = prep1.getResultSet();
-        rs.next();
+        if(!rs.next()) {
+            return null;
+        }
         String nom = rs.getString("nom");
         String prenom = rs.getString("prenom");
         int idp = rs.getInt("id");
@@ -42,7 +44,9 @@ public class Personne {
         prep1.setString(1, nom);
         prep1.execute();
         ResultSet rs = prep1.getResultSet();
-        rs.next();
+        if(!rs.next()) {
+            return null;
+        }
         String nomp = rs.getString("nom");
         String prenom = rs.getString("prenom");
         int idp = rs.getInt("id");
