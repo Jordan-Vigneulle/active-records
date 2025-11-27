@@ -1,12 +1,12 @@
 import java.sql.*;
 
 public class Film {
-    private int id;
-    private String titre;
-    private int id_rea;
+    private int fid;
+    private String ftitre;
+    private int fid_rea;
 
-    public Film(int id, String titre, int id_rea) {
-        this.id = id;
+    public Film(String titre, int id_rea) {
+        this.id = -1;
         this.titre = titre;
         this.id_rea = id_rea;
     }
@@ -17,22 +17,25 @@ public class Film {
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(sql);
         if (rs.next()) {
-            return new Film(rs.getInt("id"), rs.getString("titre"), rs.getInt("id_rea"));
+            Film f = new Film( rs.getString("titre"), rs.getInt("id_rea"));
+            f.fid = rs.getInt("id");
+            return f;
         }
+
         return null;
     }
 
     public Personne getRealisateur() throws SQLException {
-        return Personne.findById(this.id_rea);
+        return Personne.findById(this.fid_rea);
     }
 
     public static void createTable() throws SQLException {
         Connection conn = DBConnection.getConnection();
         String sql = "CREATE TABLE `Film` (\n" +
-                "  `id` int(11) NOT NULL,\n" +
+                "  `id` int(11)  AUTO_INCREMENT PRIMARy KEY,\n" +
                 "  `titre` varchar(40) NOT NULL,\n" +
                 "  `id_rea` int(11) DEFAULT NULL\n" +
-                ")";
+                "add Foreign Key (id_rea) references film(id)\n)";
         Statement stmt = conn.createStatement();
         stmt.execute(sql);
     }
@@ -42,5 +45,27 @@ public class Film {
         String sql = "DROP TABLE IF EXISTS `Film`";
         Statement stmt = conn.createStatement();
         stmt.execute(sql);
+    }
+
+    public void save() throws SQLException {
+        if(Personne.findById(this.fid_rea).getId() == -1) {
+            throw new RealisateurAbsentException("");
+        }else{
+            if(this.fid == -1) {
+                String SQLPrep = "INSERT INTO Film (titre, id_rea) VALUES (?,?);";
+                PreparedStatement prep = DBConnection.getConnection().prepareStatement(SQLPrep, Statement.RETURN_GENERATED_KEYS);
+                prep.setString(1, this.ftitre);
+                prep.setInt(2, this.fid_rea);
+                prep.executeUpdate();
+            }else{
+                String update = "Update Personne set nom = ?, prenom = ? where id = ?";
+                PreparedStatement stmt = DBConnection.getConnection().prepareStatement(update);
+                stmt.setString(1, this.ftitre);
+                stmt.setInt(2, this.fid_rea);
+                stmt.setInt(3, this.fid);
+                stmt.executeUpdate(update);
+            }
+        }
+
     }
 }
