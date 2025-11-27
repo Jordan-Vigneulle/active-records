@@ -42,6 +42,12 @@ public class TestPersonne {
     }
 
     @Test
+    public void test_FindAll() throws SQLException {
+        Personne p1 = Personne.findByNom("Scott");
+        assertEquals(p1.getNom(),"Scott");
+    }
+
+    @Test
     public void test_FindbyNom_NOK() throws SQLException {
         Personne p1 = Personne.findByNom("jscjvjksf");
         assertNull(p1);
