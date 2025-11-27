@@ -6,8 +6,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class TestPersonne {
     @BeforeEach
@@ -23,6 +22,31 @@ public class TestPersonne {
         assertEquals(pres.getNom(),p1.getNom());
         assertEquals(pres.getPrenom(),p1.getPrenom());
     }
+
+    @Test
+    public void test_FindbyID_OK() throws SQLException {
+        Personne p1 = Personne.findById(1);
+        assertEquals(p1.getPrenom(),"Steven");
+    }
+
+    @Test
+    public void test_FindbyID_NOK() throws SQLException {
+        Personne p1 = Personne.findById(30);
+        assertNull(p1);
+    }
+
+    @Test
+    public void test_FindbyNom_OK() throws SQLException {
+        Personne p1 = Personne.findByNom("Scott");
+        assertEquals(p1.getNom(),"Scott");
+    }
+
+    @Test
+    public void test_FindbyNom_NOK() throws SQLException {
+        Personne p1 = Personne.findByNom("jscjvjksf");
+        assertNull(p1);
+    }
+
 
     @AfterEach
     public void tearDown() throws SQLException {

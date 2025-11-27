@@ -21,10 +21,12 @@ public class Personne {
 
     public static Personne findById(int id) throws SQLException {
         ArrayList<Personne> list = new ArrayList<>();
-        String SQLPrep = "SELECT * FROM Personne WHERE id="+id+";";
+        String SQLPrep = "SELECT * FROM Personne WHERE id= ?;";
         PreparedStatement prep1 = DBConnection.getConnection().prepareStatement(SQLPrep);
+        prep1.setInt(1, id);
         prep1.execute();
         ResultSet rs = prep1.getResultSet();
+        rs.next();
         String nom = rs.getString("nom");
         String prenom = rs.getString("prenom");
         int idp = rs.getInt("id");
@@ -35,10 +37,12 @@ public class Personne {
 
     public static Personne findByNom(String nom) throws SQLException {
         ArrayList<Personne> list = new ArrayList<>();
-        String SQLPrep = "SELECT * FROM Personne WHERE nom="+nom+";";
+        String SQLPrep = "SELECT * FROM Personne WHERE nom=?;";
         PreparedStatement prep1 = DBConnection.getConnection().prepareStatement(SQLPrep);
+        prep1.setString(1, nom);
         prep1.execute();
         ResultSet rs = prep1.getResultSet();
+        rs.next();
         String nomp = rs.getString("nom");
         String prenom = rs.getString("prenom");
         int idp = rs.getInt("id");
