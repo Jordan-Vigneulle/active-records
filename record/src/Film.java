@@ -6,9 +6,9 @@ public class Film {
     private int fid_rea;
 
     public Film(String titre, int id_rea) {
-        this.id = -1;
-        this.titre = titre;
-        this.id_rea = id_rea;
+        this.fid = -1;
+        this.ftitre = titre;
+        this.fid_rea = id_rea;
     }
 
     public static Film findById(int id) throws SQLException {
@@ -34,8 +34,8 @@ public class Film {
         String sql = "CREATE TABLE `Film` (\n" +
                 "  `id` int(11)  AUTO_INCREMENT PRIMARy KEY,\n" +
                 "  `titre` varchar(40) NOT NULL,\n" +
-                "  `id_rea` int(11) DEFAULT NULL\n" +
-                "add Foreign Key (id_rea) references film(id)\n)";
+                "  `id_rea` int(11) DEFAULT NULL,\n" +
+                "CONSTRAINT fk_id_rea FOREIGN KEY (id_rea) REFERENCES Film(id))";
         Statement stmt = conn.createStatement();
         stmt.execute(sql);
     }
