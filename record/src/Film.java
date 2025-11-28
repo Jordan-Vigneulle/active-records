@@ -13,7 +13,7 @@ public class Film {
 
     public static Film findById(int id) throws SQLException {
         Connection conn = DBConnection.getConnection();
-        String sql = "select * from film where id = ?";
+        String sql = "select * from film where id = "+id+";";
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(sql);
         if (rs.next()) {
@@ -48,7 +48,8 @@ public class Film {
     }
 
     public void save() throws SQLException {
-        if(Personne.findById(this.fid_rea).getId() == -1) {
+        Personne real = Personne.findById(this.fid_rea);
+        if(real == null) {
             throw new RealisateurAbsentException("");
         }else{
             if(this.fid == -1) {
@@ -67,5 +68,9 @@ public class Film {
             }
         }
 
+    }
+
+    public String getTitre() {
+        return this.ftitre;
     }
 }
