@@ -3,6 +3,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+
 import static org.junit.Assert.*;
 
 public class FilmTest {
@@ -72,6 +74,39 @@ public class FilmTest {
             assertTrue(true);
         }
     }
+
+    @Test
+    public void findByRealisateurTest_OK() throws SQLException {
+        Personne p = Personne.findByNom("Scott");
+        ArrayList<Film> films = (ArrayList<Film>) Film.findByRealisateur(p);
+        assertEquals(2, films.size());
+        assertEquals("Les as de la jungle", films.get(0).getTitre());
+        assertEquals("Les as, le retour", films.get(1).getTitre());
+    }
+
+    @Test
+    public void findByRealisateurTest_NOK() {
+        Personne p = new Personne("Gérome", "Marchal");
+        try {
+            p.save();
+            Film.findByRealisateur(p);
+            fail("Une exception devait avoir lieu !");
+        } catch (RealisateurAbsentException | SQLException e) {
+            assertTrue(true);
+        }
+    }
+
+    @Test
+    public void findByRealisateurTest_PasDansBase() throws SQLException {
+        Personne p = new Personne("Gérome", "Marchal");
+        try {
+            Film.findByRealisateur(p);
+            fail("Une exception devait avoir lieu !");
+        } catch (RealisateurAbsentException | SQLException e) {
+        assertTrue(true);
+        }
+    }
+
 
     @After
     public void tearDown() throws SQLException {

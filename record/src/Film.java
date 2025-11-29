@@ -1,4 +1,6 @@
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Film {
     private int fid;
@@ -68,6 +70,22 @@ public class Film {
             }
         }
 
+    }
+
+    public static List<Film> findByRealisateur(Personne p) throws SQLException {
+        String sql = "select * from film inner join personne on film.id_rea = personne.id where nom = ? and prenom = ?;";
+        PreparedStatement stmt = DBConnection.getConnection().prepareStatement(sql);
+        stmt.setString(1, p.getNom());
+        stmt.setString(2, p.getPrenom());
+        ResultSet rs = stmt.executeQuery();
+        List<Film> films = new ArrayList<>();
+        while (rs.next()) {
+            films.add(Film.findById(rs.getInt("id")));
+        }
+        if(films.size() == 0) {
+            throw new RealisateurAbsentException("");
+        }
+        return films;
     }
 
     public String getTitre() {
