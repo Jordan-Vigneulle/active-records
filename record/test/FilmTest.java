@@ -9,6 +9,10 @@ import static org.junit.Assert.*;
 
 public class FilmTest {
 
+
+    /*
+    * Mise en place de la Base de données Personne & Film
+    * */
     @Before
     public void setUp() throws SQLException {
         Personne.createTable();
@@ -33,6 +37,10 @@ public class FilmTest {
         f5.save();
     }
 
+    /*
+    * Test insertion d'un film
+    * */
+
     @Test
     public void insertFilmTest() throws SQLException {
         Film f = new Film("Inception", 3);
@@ -43,6 +51,10 @@ public class FilmTest {
         assertEquals(3, res.getRealisateur().getId());
     }
 
+
+    /*
+    * Recherche d'un film existant
+    * */
     @Test
     public void findByIdTest_OK() throws SQLException {
         Film f = Film.findById(2);
@@ -50,11 +62,19 @@ public class FilmTest {
         assertEquals("Les as de la jungle", f.getTitre());
     }
 
+    /*
+    * Recherche d'un film inexistant
+    * */
+
     @Test
     public void findByIdTest_NOK() throws SQLException {
         Film f = Film.findById(999);
         assertNull(f);
     }
+
+    /*
+    * Récupération d'un Réalisateur présent dans la base
+    * */
 
     @Test
     public void getRealisateurTest() throws SQLException {
@@ -63,6 +83,10 @@ public class FilmTest {
         Personne rea = f.getRealisateur();
         assertEquals("Spielberg", rea.getNom());
     }
+
+    /*
+    * Test pour trouver un réalisateur absent
+    * */
 
     @Test
     public void insertFilmWithAbsentRealisateurTest() {
@@ -75,6 +99,9 @@ public class FilmTest {
         }
     }
 
+    /*
+    * Recherche d'un réalisateur existant
+    * */
     @Test
     public void findByRealisateurTest_OK() throws SQLException {
         Personne p = Personne.findByNom("Scott");
@@ -84,6 +111,9 @@ public class FilmTest {
         assertEquals("Les as, le retour", films.get(1).getTitre());
     }
 
+    /*
+    * Recherche d'un réalisateur non existant.
+    * */
     @Test
     public void findByRealisateurTest_NOK() {
         Personne p = new Personne("Gérome", "Marchal");
@@ -96,6 +126,10 @@ public class FilmTest {
         }
     }
 
+    /*
+    * Réalisateur pas dans la base
+    * */
+
     @Test
     public void findByRealisateurTest_PasDansBase() throws SQLException {
         Personne p = new Personne("Gérome", "Marchal");
@@ -107,6 +141,9 @@ public class FilmTest {
         }
     }
 
+    /*
+    * Suppression dans la base 
+    * */
 
     @After
     public void tearDown() throws SQLException {
